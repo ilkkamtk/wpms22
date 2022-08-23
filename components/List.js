@@ -4,7 +4,6 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  Platform,
   StyleSheet,
 } from 'react-native';
 
@@ -66,17 +65,6 @@ const List = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  droidSafeArea: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: Platform.OS === 'android' ? 30 : 0,
-  },
   row: {
     flexDirection: 'row',
     backgroundColor: '#ccc',

@@ -12,4 +12,12 @@ const App = () => {
   );
 };
 
+const styles = StyleSheet.create({
+  droidSafeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'android' ? 30 : 0,
+  },
+});
+
 export default App;
