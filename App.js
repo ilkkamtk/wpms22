@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 
+import PropTypes from 'prop-types';
+
 const mediaArray = [
   {
     key: '0',
@@ -50,12 +52,14 @@ const App = () => {
         data={mediaArray}
         renderItem={({item}) => {
           return (
-            <TouchableOpacity>
-              <Image
-                style={{width: 100, height: 100}}
-                source={{uri: item.thumbnails.w160}}
-              />
-              <View>
+            <TouchableOpacity style={styles.row}>
+              <View style={styles.box}>
+                <Image
+                  style={{width: 100, height: 100}}
+                  source={{uri: item.thumbnails.w160}}
+                />
+              </View>
+              <View style={styles.box}>
                 <Text>{item.title}</Text>
                 <Text>{item.description}</Text>
               </View>
@@ -79,6 +83,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: Platform.OS === 'android' ? 30 : 0,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  box: {
+    flex: 1,
   },
 });
 
