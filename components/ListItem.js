@@ -1,4 +1,5 @@
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
 
 const ListItem = (props) => {
   return (
@@ -36,5 +37,9 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
 });
+
+ListItem.propTypes = {
+  singleMedia: PropTypes.object,
+};
 
 export default ListItem;
