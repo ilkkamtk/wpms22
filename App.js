@@ -60,7 +60,7 @@ const App = () => {
                 />
               </View>
               <View style={styles.box}>
-                <Text>{item.title}</Text>
+                <Text style={styles.listTitle}>{item.title}</Text>
                 <Text>{item.description}</Text>
               </View>
             </TouchableOpacity>
@@ -86,12 +86,20 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    backgroundColor: '#ccc',
+    marginBottom: 10,
   },
   box: {
     flex: 1,
+    padding: 10,
   },
   image: {
     flex: 1,
+  },
+  listTitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    paddingBottom: 15,
   },
 });
 
