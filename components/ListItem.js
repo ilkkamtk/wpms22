@@ -1,11 +1,40 @@
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
-const ListItem = () => {
+const ListItem = (props) => {
   return (
-    <View>
-      <Text>ListItem</Text>
-    </View>
+    <TouchableOpacity style={styles.row}>
+      <View style={styles.box}>
+        <Image
+          style={styles.image}
+          source={{uri: props.singleMedia.thumbnails.w160}}
+        />
+      </View>
+      <View style={styles.box}>
+        <Text style={styles.listTitle}>{props.singleMedia.title}</Text>
+        <Text>{props.singleMedia.description}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    backgroundColor: '#ccc',
+    marginBottom: 10,
+  },
+  box: {
+    flex: 1,
+    padding: 10,
+  },
+  image: {
+    flex: 1,
+  },
+  listTitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    paddingBottom: 15,
+  },
+});
 
 export default ListItem;
