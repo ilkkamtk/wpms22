@@ -55,7 +55,7 @@ const App = () => {
             <TouchableOpacity style={styles.row}>
               <View style={styles.box}>
                 <Image
-                  style={{width: 100, height: 100}}
+                  style={styles.image}
                   source={{uri: item.thumbnails.w160}}
                 />
               </View>
@@ -88,6 +88,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   box: {
+    flex: 1,
+  },
+  image: {
     flex: 1,
   },
 });
