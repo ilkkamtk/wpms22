@@ -2,13 +2,13 @@ import {useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
 import ListItem from './ListItem';
 
+const apiUrl = 'https://media.mw.metropolia.fi/wbma/';
+
 const List = () => {
-  const url =
-    'https://raw.githubusercontent.com/mattpe/wbma/master/docs/assets/test.json';
   const [mediaArray, setMediaArray] = useState([]);
   const loadMedia = async () => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(apiUrl + 'media');
       const json = await response.json();
       console.log(json);
       setMediaArray(json);
