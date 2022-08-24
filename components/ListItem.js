@@ -1,20 +1,20 @@
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 
-const ListItem = (props) => {
+const ListItem = ({singleMedia}) => {
   const mediaUrl = 'https://media.mw.metropolia.fi/wbma/uploads/';
-  console.log(props.singleMedia);
+  console.log(singleMedia);
   return (
     <TouchableOpacity style={styles.row}>
       <View style={styles.box}>
         <Image
           style={styles.image}
-          source={{uri: mediaUrl + props.singleMedia.thumbnails.w160}}
+          source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
         />
       </View>
       <View style={styles.box}>
-        <Text style={styles.listTitle}>{props.singleMedia.title}</Text>
-        <Text>{props.singleMedia.description}</Text>
+        <Text style={styles.listTitle}>{singleMedia.title}</Text>
+        <Text>{singleMedia.description}</Text>
       </View>
     </TouchableOpacity>
   );
