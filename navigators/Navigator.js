@@ -22,7 +22,7 @@ const StackScreen = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Tabs"
+        name="Back"
         component={TabScreen}
         options={{headerShown: false}}
       />

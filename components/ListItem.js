@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 const ListItem = ({singleMedia, navigation}) => {
   const mediaUrl = 'https://media.mw.metropolia.fi/wbma/uploads/';
-  console.log(singleMedia);
+  // console.log('ListItem: ', singleMedia);
   return (
     <TouchableOpacity
       style={styles.row}
       onPress={() => {
-        navigation.navigate('Single');
+        navigation.navigate('Single', singleMedia);
       }}
     >
       <View style={styles.box}>
