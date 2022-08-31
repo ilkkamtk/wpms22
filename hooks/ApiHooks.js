@@ -1,17 +1,15 @@
 import {useEffect, useState} from 'react';
-
-const apiUrl = 'https://media.mw.metropolia.fi/wbma/';
+import {doFetch} from '../utils/http';
+import {apiUrl} from '../utils/variables';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
   const loadMedia = async () => {
     try {
-      const response = await fetch(apiUrl + 'media?limit=5');
-      const json = await response.json();
+      const json = await doFetch(apiUrl + 'media?limit=5');
       console.log(json);
       const allMediaData = json.map(async (mediaItem) => {
-        const response = await fetch(apiUrl + 'media/' + mediaItem.file_id);
-        return await response.json();
+        return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
       });
       setMediaArray(await Promise.all(allMediaData));
     } catch (error) {
@@ -36,12 +34,7 @@ const useLogin = () => {
       body: JSON.stringify(userCredentials),
     };
     try {
-      const response = await fetch(apiUrl + 'login', options);
-      if (!response.ok) {
-        throw new Error(response.status + ' - ' + response.statusText);
-      }
-      return await response.json();
-      // TODO: use fetch to send request to login endpoint and return the result as json, handle errors with try/catch and response.ok
+      return await doFetch(apiUrl + 'login', options);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -57,13 +50,8 @@ const useUser = () => {
         method: 'GET',
         headers: {'x-access-token': token},
       };
-      const response = await fetch(apiUrl + 'users/user', options);
-      const userData = await response.json();
-      if (response.ok) {
-        return userData;
-      } else {
-        throw new Error(userData.message);
-      }
+      const userData = await doFetch(apiUrl + 'users/user', options);
+      return userData;
     } catch (error) {
       throw new Error(error.message);
     }
