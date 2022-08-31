@@ -51,7 +51,25 @@ const useLogin = () => {
 };
 
 const useUser = () => {
-  // TODO: later
+  const getUserByToken = async (token) => {
+    try {
+      const options = {
+        method: 'GET',
+        headers: {'x-access-token': token},
+      };
+      const response = await fetch(apiUrl + 'users/user', options);
+      const userData = await response.json();
+      if (response.ok) {
+        return userData;
+      } else {
+        throw new Error(userData.message);
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {getUserByToken};
 };
 
 export {useLogin, useMedia, useUser};
