@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import {useContext, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useLogin, useUser} from '../hooks/ApiHooks';
+import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 
 const Login = ({navigation}) => {
   // props is needed for navigation
-  const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
-  const {postLogin} = useLogin();
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {getUserByToken} = useUser();
 
   const checkToken = async () => {
