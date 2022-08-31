@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import {useContext, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useLogin} from '../hooks/ApiHooks';
 
 const Login = ({navigation}) => {
   // props is needed for navigation
   const [isLoggedIn, setIsLoggedIn] = useContext(MainContext);
+  const {postLogin} = useLogin();
 
   const checkToken = async () => {
     try {
@@ -26,10 +28,15 @@ const Login = ({navigation}) => {
   }, []);
 
   const logIn = async () => {
+    const loginCredentials = {
+      username: 'jamesb',
+      password: 'examplepass',
+    };
     try {
       console.log('Button pressed', isLoggedIn);
+      const userData = await postLogin(loginCredentials);
+      await AsyncStorage.setItem('userToken', userData.token);
       setIsLoggedIn(true);
-      await AsyncStorage.setItem('userToken', 'abc');
     } catch (error) {
       console.error('Login - logIn', error);
     }
