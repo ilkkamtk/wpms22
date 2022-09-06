@@ -1,10 +1,11 @@
-import {useContext} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button} from 'react-native';
+import {useContext, useState} from 'react';
+import {StyleSheet, SafeAreaView, Text, Button, Image} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
 
   console.log('Profile', isLoggedIn);
 
@@ -23,6 +24,8 @@ const Profile = () => {
       <Text>
         User: {user.username} (id: {user.user_id})
       </Text>
+      <Image source={{url: avatar}} style={{width: 200, height: 200}} />
+
       <Text>Email: {user.email}</Text>
       <Text>Full name: {user.full_name}</Text>
       <Text>User since: {user.time_created}</Text>
