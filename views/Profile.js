@@ -1,9 +1,9 @@
 import {useContext, useState, useEffect} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button, Image} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
+import {Button, Image, Text} from '@rneui/themed';
 
 const Profile = () => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
@@ -37,7 +37,7 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <Text>Profile</Text>
       <Text>
         User: {user.username} (id: {user.user_id})
@@ -48,18 +48,8 @@ const Profile = () => {
       <Text>Full name: {user.full_name}</Text>
       <Text>User since: {user.time_created}</Text>
       <Button title="Logout" onPress={logOut} />
-    </SafeAreaView>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-  },
-});
 
 export default Profile;
