@@ -11,9 +11,14 @@ const Profile = () => {
   const {getFilesByTag} = useTag();
 
   const fetchAvatar = async () => {
-    const avatarArray = await getFilesByTag('avatar_2218');
-    const avatarFile = avatarArray.pop();
-    setAvatar(mediaUrl + avatarFile.filename);
+    try {
+      const avatarArray = await getFilesByTag('avatar_' + user.user_id);
+      const avatarFile = avatarArray.pop();
+      setAvatar(mediaUrl + avatarFile.filename);
+      console.log('avatarArray', mediaUrl + avatarFile.filename);
+    } catch (error) {
+      console.error('fetchAvatar', error.message);
+    }
   };
 
   useEffect(() => {
