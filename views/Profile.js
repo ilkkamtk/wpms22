@@ -3,7 +3,7 @@ import {StyleSheet, SafeAreaView, Text, Button, Image} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks/ApiHooks';
-import {apiUrl, mediaUrl} from '../utils/variables';
+import {mediaUrl} from '../utils/variables';
 
 const Profile = () => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
