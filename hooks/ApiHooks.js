@@ -6,7 +6,7 @@ const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
   const loadMedia = async () => {
     try {
-      const json = await doFetch(apiUrl + 'media?limit=5');
+      const json = await doFetch(apiUrl + 'media?limit=10');
       console.log(json);
       const allMediaData = json.map(async (mediaItem) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);

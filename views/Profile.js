@@ -3,7 +3,8 @@ import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
-import {Avatar, Button, Card, Icon, ListItem, Text} from '@rneui/themed';
+import {Avatar, Button, Card, ListItem} from '@rneui/themed';
+import FullSizeImage from '../components/FullSizeImage';
 
 const Profile = () => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
@@ -39,19 +40,22 @@ const Profile = () => {
   return (
     <Card>
       <Card.Title>{user.full_name}</Card.Title>
-      <Card.Image source={{uri: avatar}} />
+      <FullSizeImage source={{uri: avatar}} />
       <ListItem>
         <Avatar
           icon={{name: 'contact-mail', type: 'material'}}
           containerStyle={{backgroundColor: '#aaa'}}
         />
-        <Text>{user.email}</Text>
+        <ListItem.Title>{user.email}</ListItem.Title>
       </ListItem>
       <ListItem>
-        <Icon name="person" />
-        <Text>
+        <Avatar
+          icon={{name: 'person', type: 'material'}}
+          containerStyle={{backgroundColor: '#aaa'}}
+        />
+        <ListItem.Title>
           {user.username} (id: {user.user_id})
-        </Text>
+        </ListItem.Title>
       </ListItem>
       <Button title="Logout" onPress={logOut} />
     </Card>
