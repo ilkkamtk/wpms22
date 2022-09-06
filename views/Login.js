@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import {useContext, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';
@@ -34,21 +34,12 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View>
       <LoginForm />
       <RegisterForm />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 Login.propTypes = {
   navigation: PropTypes.object,
