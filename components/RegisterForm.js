@@ -4,13 +4,14 @@ import {useUser} from '../hooks/ApiHooks';
 import {Card} from '@rneui/themed';
 
 const RegisterForm = () => {
-  const {postUser} = useUser();
+  const {checkUsername, postUser} = useUser();
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm({
     defaultValues: {username: '', email: '', password: '', full_name: ''},
+    mode: 'onBlur',
   });
 
   const register = async (userData) => {
@@ -33,6 +34,10 @@ const RegisterForm = () => {
         rules={{
           required: true,
           minLength: 3,
+          validate: async (value) => {
+            const available = await checkUsername(value);
+            return available ? true : 'Username not available!';
+          },
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -47,6 +52,9 @@ const RegisterForm = () => {
               )) ||
               (errors.username?.type === 'minLength' && (
                 <Text>Min 3 chars!</Text>
+              )) ||
+              (errors.username?.type === 'validate' && (
+                <Text>{errors.username.message}</Text>
               ))
             }
           />

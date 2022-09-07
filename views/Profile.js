@@ -5,6 +5,7 @@ import {useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/variables';
 import {Avatar, Button, Card, ListItem} from '@rneui/themed';
 import FullSizeImage from '../components/FullSizeImage';
+import {ScrollView} from 'react-native';
 
 const Profile = () => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
@@ -18,7 +19,7 @@ const Profile = () => {
       setAvatar(mediaUrl + avatarFile.filename);
       console.log('avatarArray', mediaUrl + avatarFile.filename);
     } catch (error) {
-      console.error('fetchAvatar', error.message);
+      console.log('fetchAvatar', error.message);
     }
   };
 
@@ -38,27 +39,29 @@ const Profile = () => {
   };
 
   return (
-    <Card>
-      <Card.Title>{user.full_name}</Card.Title>
-      <FullSizeImage source={{uri: avatar}} />
-      <ListItem>
-        <Avatar
-          icon={{name: 'contact-mail', type: 'material'}}
-          containerStyle={{backgroundColor: '#aaa'}}
-        />
-        <ListItem.Title>{user.email}</ListItem.Title>
-      </ListItem>
-      <ListItem>
-        <Avatar
-          icon={{name: 'person', type: 'material'}}
-          containerStyle={{backgroundColor: '#aaa'}}
-        />
-        <ListItem.Title>
-          {user.username} (id: {user.user_id})
-        </ListItem.Title>
-      </ListItem>
-      <Button title="Logout" onPress={logOut} />
-    </Card>
+    <ScrollView>
+      <Card>
+        <Card.Title>{user.full_name}</Card.Title>
+        <FullSizeImage source={{uri: avatar}} />
+        <ListItem>
+          <Avatar
+            icon={{name: 'contact-mail', type: 'material'}}
+            containerStyle={{backgroundColor: '#aaa'}}
+          />
+          <ListItem.Title>{user.email}</ListItem.Title>
+        </ListItem>
+        <ListItem>
+          <Avatar
+            icon={{name: 'person', type: 'material'}}
+            containerStyle={{backgroundColor: '#aaa'}}
+          />
+          <ListItem.Title>
+            {user.username} (id: {user.user_id})
+          </ListItem.Title>
+        </ListItem>
+        <Button title="Logout" onPress={logOut} />
+      </Card>
+    </ScrollView>
   );
 };
 
