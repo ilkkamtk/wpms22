@@ -8,6 +8,7 @@ const RegisterForm = () => {
   const {
     control,
     handleSubmit,
+    getValues,
     formState: {errors},
   } = useForm({
     defaultValues: {username: '', email: '', password: '', full_name: ''},
@@ -65,7 +66,11 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: {value: true, message: 'This is required.'},
+          pattern: {
+            value: /^[a-z0-9.]{1,128}@[a-z0-9.]{5,128}/i,
+            message: 'Must be valid email.',
+          },
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -74,7 +79,7 @@ const RegisterForm = () => {
             value={value}
             placeholder="Email"
             autoCapitalize="none"
-            errorMessage={errors.email && <Text>This is required.</Text>}
+            errorMessage={errors.email && <Text>{errors.email.message}</Text>}
           />
         )}
         name="email"
@@ -83,7 +88,8 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: {value: true, message: 'Required'},
+          minLength: {value: 5, message: 'Min length 5 chars.'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -92,10 +98,40 @@ const RegisterForm = () => {
             value={value}
             secureTextEntry={true}
             placeholder="Password"
-            errorMessage={errors.password && <Text>This is required.</Text>}
+            errorMessage={
+              errors.password && <Text>{errors.password.message}</Text>
+            }
           />
         )}
         name="password"
+      />
+
+      <Controller
+        control={control}
+        rules={{
+          validate: (value) => {
+            if (value === getValues('password')) {
+              return true;
+            } else {
+              return 'Does not match to password.';
+            }
+          },
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <Input
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            secureTextEntry={true}
+            placeholder="Confirm password"
+            errorMessage={
+              errors.confirmPassword && (
+                <Text>{errors.confirmPassword.message}</Text>
+              )
+            }
+          />
+        )}
+        name="confirmPassword"
       />
 
       <Controller
