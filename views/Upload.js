@@ -3,9 +3,11 @@ import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useMedia} from '../hooks/ApiHooks';
 
 const Upload = () => {
   const [image, setImage] = useState(null);
+  const {postMedia} = useMedia();
 
   const {
     control,
@@ -21,7 +23,7 @@ const Upload = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.5,
     });
 
     console.log('file: ', result);
@@ -41,6 +43,8 @@ const Upload = () => {
       type: 'image/jpeg',
     });
     const token = await AsyncStorage.getItem('userToken');
+    const uploadResponse = await postMedia(token, formData);
+    console.log('upload response', uploadResponse);
   };
 
   return (
