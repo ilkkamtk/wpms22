@@ -2,6 +2,7 @@ import {Input, Button, Text, Card} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Upload = () => {
   const [image, setImage] = useState(null);
@@ -28,6 +29,18 @@ const Upload = () => {
     if (!result.cancelled) {
       setImage(result);
     }
+  };
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('file', {
+      uri: image.uri,
+      name: 'testi.jpg',
+      type: 'image/jpeg',
+    });
+    const token = await AsyncStorage.getItem('userToken');
   };
 
   return (
@@ -71,7 +84,7 @@ const Upload = () => {
 
       <Button title="Select media" onPress={pickImage} />
 
-      <Button title="Upload media" />
+      <Button title="Upload media" onPress={handleSubmit(onSubmit)} />
     </Card>
   );
 };

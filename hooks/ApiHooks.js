@@ -20,7 +20,21 @@ const useMedia = () => {
   useEffect(() => {
     loadMedia();
   }, []);
-  return {mediaArray};
+
+  const postMedia = async (token, data) => {
+    const options = {
+      method: 'POST',
+      headers: {'x-access-token': token},
+      body: data,
+    };
+    try {
+      return await doFetch(apiUrl + 'media', options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {mediaArray, postMedia};
 };
 
 const useLogin = () => {
