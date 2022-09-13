@@ -1,7 +1,11 @@
 import {Input, Button, Text, Card} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
+import * as ImagePicker from 'expo-image-picker';
+import {useState} from 'react';
 
 const Upload = () => {
+  const [image, setImage] = useState(null);
+
   const {
     control,
     handleSubmit,
@@ -10,11 +14,25 @@ const Upload = () => {
     defaultValues: {title: '', description: ''},
   });
 
-  const pickImage = () => {};
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log('file: ', result);
+
+    if (!result.cancelled) {
+      setImage(result);
+    }
+  };
 
   return (
     <Card>
-      <Card.Image source={{uri: 'https://placekitten.com/300'}} />
+      <Card.Image source={{uri: image?.uri || 'https://placekitten.com/300'}} />
       <Controller
         control={control}
         rules={{
