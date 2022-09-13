@@ -15,9 +15,9 @@ const Login = ({navigation}) => {
   const [showRegForm, setShowRegForm] = useState(false);
 
   const checkToken = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    console.log('token', userToken);
     try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      console.log('token', userToken);
       // TODO: call getUserByToken(userToken), if you get successful result,
       // set isLoggedIn to true and navigate to Tabs
       if (userToken != null) {
