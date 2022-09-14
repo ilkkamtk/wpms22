@@ -3,16 +3,18 @@ import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import {useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {Alert} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
+import {applicationTag} from '../utils/variables';
 
 const Upload = ({navigation}) => {
   const [mediafile, setMediafile] = useState(null);
   const [mediatype, setMediatype] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const {postMedia} = useMedia();
+  const {postTag} = useTag();
   const {update, setUpdate} = useContext(MainContext);
 
   const {
@@ -56,9 +58,12 @@ const Upload = ({navigation}) => {
     setIsLoading(true);
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const result = await postMedia(token, formData);
-      console.log('onSubmit upload', result);
-      Alert.alert(result.message, '', [
+      const mediaResponse = await postMedia(token, formData);
+      console.log('onSubmit upload', mediaResponse);
+      const tag = {file_id: mediaResponse.file_id, tag: applicationTag};
+      const tagResponse = await postTag(token, tag);
+      console.log('onSubmit postTag', tagResponse);
+      Alert.alert(mediaResponse.message, '', [
         {
           text: 'Ok',
           onPress: () => {

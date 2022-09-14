@@ -4,6 +4,9 @@ import {apiUrl} from '../utils/variables';
 
 const useMedia = (update) => {
   const [mediaArray, setMediaArray] = useState([]);
+  // TODO: Modify loadMedia() in ApiHooks.js
+  // to show only the files which have the identifier tag of your app.
+  // tag is in variables.js
   const loadMedia = async () => {
     try {
       const json = await doFetch(apiUrl + 'media?limit=10');
@@ -104,7 +107,23 @@ const useTag = () => {
     return await doFetch(apiUrl + 'tags/' + tag);
   };
 
-  return {getFilesByTag};
+  const postTag = async (token, tag) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(tag),
+    };
+    try {
+      return await doFetch(apiUrl + 'tags', options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {getFilesByTag, postTag};
 };
 
 export {useLogin, useMedia, useUser, useTag};
