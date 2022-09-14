@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {doFetch} from '../utils/http';
 import {apiUrl} from '../utils/variables';
 
-const useMedia = () => {
+const useMedia = (update) => {
   const [mediaArray, setMediaArray] = useState([]);
   const loadMedia = async () => {
     try {
@@ -19,7 +19,7 @@ const useMedia = () => {
   };
   useEffect(() => {
     loadMedia();
-  }, []);
+  }, [update]);
 
   const postMedia = async (token, data) => {
     const options = {

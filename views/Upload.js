@@ -1,15 +1,24 @@
 import {Input, Button, Text, Card} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useMedia} from '../hooks/ApiHooks';
+import {Alert} from 'react-native';
+import PropTypes from 'prop-types';
+import {MainContext} from '../contexts/MainContext';
 
-const Upload = () => {
-  const [image, setImage] = useState(null);
+const Upload = ({navigation}) => {
+  const [mediafile, setMediafile] = useState(null);
+  const [mediatype, setMediatype] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const {postMedia} = useMedia();
+  const {update, setUpdate} = useContext(MainContext);
 
   const {
     control,
     handleSubmit,
+    setValue,
     formState: {errors},
   } = useForm({
     defaultValues: {title: '', description: ''},
@@ -23,11 +32,10 @@ const Upload = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
     console.log('file: ', result);
-
     if (!result.cancelled) {
-      setImage(result);
+      setMediafile(result.uri);
+      setMediatype(result.type);
     }
   };
 
@@ -35,17 +43,49 @@ const Upload = () => {
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
+    const filename = mediafile.split('/').pop();
+    let extension = filename.split('.').pop();
+    // change jpg to jpeg
+    extension = extension === 'jpg' ? 'jpeg' : extension;
     formData.append('file', {
-      uri: image.uri,
-      name: 'testi.jpg',
-      type: 'image/jpeg',
+      uri: mediafile,
+      name: filename,
+      type: mediatype + '/' + extension,
     });
-    const token = await AsyncStorage.getItem('userToken');
+    // console.log('onSubmit formdata', formData);
+    setIsLoading(true);
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const result = await postMedia(token, formData);
+      console.log('onSubmit upload', result);
+      Alert.alert(result.message, '', [
+        {
+          text: 'Ok',
+          onPress: () => {
+            resetForm();
+            setUpdate(!update);
+            navigation.navigate('Home');
+          },
+        },
+      ]);
+    } catch (error) {
+      console.error('onSubmit upload failed', error);
+      // TODO: add error user notification
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const resetForm = () => {
+    setMediafile(null);
+    setMediatype(null);
+    setValue('title', '');
+    setValue('description', '');
   };
 
   return (
     <Card>
-      <Card.Image source={{uri: image?.uri || 'https://placekitten.com/300'}} />
+      <Card.Image source={{uri: mediafile || 'https://placekitten.com/300'}} />
       <Controller
         control={control}
         rules={{
@@ -83,10 +123,19 @@ const Upload = () => {
       />
 
       <Button title="Select media" onPress={pickImage} />
-
-      <Button title="Upload media" onPress={handleSubmit(onSubmit)} />
+      <Button title="Reset" onPress={resetForm} />
+      <Button
+        title="Upload media"
+        disabled={!mediafile}
+        loading={isLoading}
+        onPress={handleSubmit(onSubmit)}
+      />
     </Card>
   );
+};
+
+Upload.propTypes = {
+  navigation: PropTypes.object,
 };
 
 export default Upload;
