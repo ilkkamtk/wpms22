@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {doFetch} from '../utils/http';
-import {apiUrl} from '../utils/variables';
+import {apiUrl, applicationTag} from '../utils/variables';
 
 const useMedia = (update) => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -9,7 +9,7 @@ const useMedia = (update) => {
   // tag is in variables.js
   const loadMedia = async () => {
     try {
-      const json = await doFetch(apiUrl + 'media?limit=10');
+      const json = await useTag().getFilesByTag(applicationTag);
       console.log(json);
       const allMediaData = json.map(async (mediaItem) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
