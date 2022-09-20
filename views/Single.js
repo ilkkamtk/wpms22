@@ -8,11 +8,25 @@ import {Video} from 'expo-av';
 import {useEffect} from 'react';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {useState} from 'react';
+import {useTag} from '../hooks/ApiHooks';
 
 const Single = ({route}) => {
   // console.log('Single route', route);
   const {filename, title, description, user_id, media_type} = route.params;
   const [videoRef, setVideoRef] = useState(null);
+  const [avatar, setAvatar] = useState('https://placekitten.com/160');
+  const {getFilesByTag} = useTag();
+
+  const fetchAvatar = async () => {
+    try {
+      const avatarArray = await getFilesByTag('avatar_' + user_id);
+      const avatarFile = avatarArray.pop();
+      setAvatar(mediaUrl + avatarFile.filename);
+      console.log('avatarArray', mediaUrl + avatarFile.filename);
+    } catch (error) {
+      console.log('fetchAvatar', error.message);
+    }
+  };
 
   const handleVideoRef = (component) => {
     setVideoRef(component);
@@ -45,6 +59,7 @@ const Single = ({route}) => {
   };
 
   useEffect(() => {
+    fetchAvatar();
     unlock();
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       // console.log('Orientaatio:', evt);
@@ -88,7 +103,7 @@ const Single = ({route}) => {
           <Text>{description}</Text>
         </ListItem>
         <ListItem>
-          <Avatar source={{uri: 'https://placekitten.com/160'}} />
+          <Avatar source={{uri: avatar}} />
           <Text>{user_id}</Text>
         </ListItem>
       </Card>
