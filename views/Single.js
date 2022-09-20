@@ -18,10 +18,46 @@ const Single = ({route}) => {
     setVideoRef(component);
   };
 
+  const unlock = async () => {
+    try {
+      await ScreenOrientation.unlockAsync();
+    } catch (error) {
+      // no error neccessary
+    }
+  };
+
+  const lock = async () => {
+    try {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      // no error neccessary
+    }
+  };
+
+  const showFullscreenVideo = async () => {
+    try {
+      if (videoRef) await videoRef.presentFullscreenPlayer();
+    } catch (error) {
+      console.log('fs video', error);
+    }
+  };
+
   useEffect(() => {
-    ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('Orientaatio:', evt);
+    unlock();
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
+      // console.log('Orientaatio:', evt);
+      if (evt.orientationInfo.orientation > 2) {
+        // show fullscreen video
+        showFullscreenVideo();
+      }
     });
+
+    return () => {
+      lock();
+      ScreenOrientation.removeOrientationChangeListener(orientSub);
+    };
   }, [videoRef]);
 
   return (
