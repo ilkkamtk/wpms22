@@ -4,20 +4,25 @@ import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/variables';
 import {Card, ListItem, Text, Avatar} from '@rneui/themed';
 import FullSizeImage from '../components/FullSizeImage';
+import {Video} from 'expo-av';
 
 const Single = ({route}) => {
   console.log('Single route', route);
-  const {filename, title, description, user_id} = route.params;
+  const {filename, title, description, user_id, media_type} = route.params;
   return (
     <ScrollView>
       <Card>
         <Card.Title>{title}</Card.Title>
         <Card.Divider />
-        <FullSizeImage
-          source={{uri: mediaUrl + filename}}
-          PlaceholderContent={<ActivityIndicator />}
-          style={{marginBottom: 12}}
-        />
+        {media_type === 'image' ? (
+          <FullSizeImage
+            source={{uri: mediaUrl + filename}}
+            PlaceholderContent={<ActivityIndicator />}
+            style={{marginBottom: 12}}
+          />
+        ) : (
+          <Video source={{uri: mediaUrl + filename}} />
+        )}
         <Card.Divider />
         <ListItem>
           <Text>{description}</Text>
