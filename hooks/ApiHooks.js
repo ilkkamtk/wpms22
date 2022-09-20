@@ -96,7 +96,9 @@ const useUser = () => {
     }
   };
 
-  return {checkUsername, getUserByToken, postUser};
+  const getUserById = () => {};
+
+  return {checkUsername, getUserByToken, postUser, getUserById};
 };
 
 const useTag = () => {
