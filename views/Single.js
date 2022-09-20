@@ -17,6 +17,8 @@ const Single = ({route}) => {
   const [avatar, setAvatar] = useState('https://placekitten.com/160');
   const {getFilesByTag} = useTag();
 
+  // TODO: show owners username
+
   const fetchAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + user_id);
