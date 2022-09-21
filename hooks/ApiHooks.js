@@ -13,6 +13,7 @@ const useMedia = (update, myFilesOnly = false) => {
       if (myFilesOnly) {
         json = json.filter((file) => file.user_id === user.user_id);
       }
+      json.reverse();
       const allMediaData = json.map(async (mediaItem) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
       });
@@ -87,6 +88,7 @@ const useUser = () => {
   };
 
   const postUser = async (userData) => {
+    // console.log('creating user', userData);
     const options = {
       method: 'POST',
       headers: {
