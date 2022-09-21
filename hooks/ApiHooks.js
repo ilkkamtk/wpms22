@@ -40,7 +40,32 @@ const useMedia = (update, myFilesOnly = false) => {
     }
   };
 
-  return {mediaArray, postMedia};
+  const putMedia = async (token, data, fileId) => {
+    const options = {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json', 'x-access-token': token},
+      body: JSON.stringify(data),
+    };
+    try {
+      return await doFetch(apiUrl + 'media/' + fileId, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const deleteMedia = async (token, fileId) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    try {
+      return await doFetch(apiUrl + 'media/' + fileId, options);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {mediaArray, postMedia, putMedia, deleteMedia};
 };
 
 const useLogin = () => {

@@ -14,7 +14,11 @@ const List = ({navigation, myFilesOnly}) => {
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) => (
-        <ListItem singleMedia={item} navigation={navigation} />
+        <ListItem
+          singleMedia={item}
+          navigation={navigation}
+          myFilesOnly={myFilesOnly}
+        />
       )}
     />
   );
