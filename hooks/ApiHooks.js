@@ -5,8 +5,10 @@ import {apiUrl, applicationTag} from '../utils/variables';
 
 const useMedia = (update, myFilesOnly = false) => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [loading, setLoading] = useState(false);
   const {user} = useContext(MainContext);
   const loadMedia = async () => {
+    setLoading(true);
     try {
       let json = await useTag().getFilesByTag(applicationTag);
       // console.log(json);
@@ -18,6 +20,7 @@ const useMedia = (update, myFilesOnly = false) => {
         return await doFetch(apiUrl + 'media/' + mediaItem.file_id);
       });
       setMediaArray(await Promise.all(allMediaData));
+      setLoading(false);
     } catch (error) {
       console.log('media fetch failed', error);
       // TODO: notify user?
@@ -65,7 +68,7 @@ const useMedia = (update, myFilesOnly = false) => {
     }
   };
 
-  return {mediaArray, postMedia, putMedia, deleteMedia};
+  return {mediaArray, postMedia, putMedia, deleteMedia, loading};
 };
 
 const useLogin = () => {

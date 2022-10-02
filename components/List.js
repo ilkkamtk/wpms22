@@ -2,28 +2,23 @@ import {FlatList} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
-import {useContext, useState} from 'react';
+import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
 
 const List = ({navigation, myFilesOnly}) => {
   const {update, setUpdate} = useContext(MainContext);
-  const {mediaArray} = useMedia(update, myFilesOnly);
-  const [isFetching, setIsFetching] = useState(false);
+  const {mediaArray, loading} = useMedia(update, myFilesOnly);
 
-  const onRefresh = async () => {
-    setIsFetching(true);
+  const doRefresh = () => {
     setUpdate(update + 1);
-    setIsFetching(false);
   };
 
   // useFocusEffect when using navigation
   useFocusEffect(() => {
-    const interval = setInterval(async () => {
+    const interval = setInterval(() => {
       try {
-        await onRefresh();
-        console.log(update);
-        console.log('interval');
+        doRefresh();
       } catch (error) {
         console.log('interval error');
       }
@@ -37,8 +32,8 @@ const List = ({navigation, myFilesOnly}) => {
   return (
     <FlatList
       data={mediaArray}
-      onRefresh={onRefresh}
-      refreshing={isFetching}
+      onRefresh={doRefresh}
+      refreshing={loading}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) => (
         <ListItem
