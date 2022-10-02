@@ -3,10 +3,12 @@ import {Controller, useForm} from 'react-hook-form';
 import {useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
-import {Alert} from 'react-native';
+import {Alert, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import {mediaUrl} from '../utils/variables';
+import FullSizeImage from '../components/FullSizeImage';
+import {Video} from 'expo-av';
 
 const ModifyFile = ({navigation, route}) => {
   const file = route.params;
@@ -47,7 +49,36 @@ const ModifyFile = ({navigation, route}) => {
 
   return (
     <Card>
-      <Card.Image source={{uri: mediaUrl + file.filename}} />
+      {file.media_type === 'image' ? (
+        <FullSizeImage
+          source={{uri: mediaUrl + file.filename}}
+          PlaceholderContent={<ActivityIndicator />}
+          style={{marginBottom: 12}}
+        />
+      ) : (
+        // use Card.Image as a hack to fix card not stretching
+        <>
+          <Card.Image
+            style={{
+              width: '100%',
+              height: undefined,
+              aspectRatio: 1,
+            }}
+          >
+            <Video
+              source={{uri: mediaUrl + file.filename}}
+              style={{width: '100%', height: '100%'}}
+              onError={(error) => {
+                console.log('Video error:', error);
+              }}
+              shouldPlay
+              useNativeControls
+              isLooping
+            />
+          </Card.Image>
+          <Card.Divider />
+        </>
+      )}
       <Controller
         control={control}
         rules={{

@@ -39,19 +39,25 @@ const ListItem = ({singleMedia, navigation, myFilesOnly}) => {
   const swipeProps = {};
 
   if (singleMedia.user_id === user.user_id) {
-    swipeProps.leftContent = () => (
+    swipeProps.leftContent = (reset) => (
       <Button
         title="Edit"
-        onPress={() => navigation.navigate('ModifyFile', singleMedia)}
+        onPress={() => {
+          navigation.navigate('ModifyFile', singleMedia);
+          reset();
+        }}
         icon={{name: 'edit', color: 'white'}}
         buttonStyle={{minHeight: '100%'}}
       />
     );
 
-    swipeProps.rightContent = () => (
+    swipeProps.rightContent = (reset) => (
       <Button
         title="Delete"
-        onPress={() => doDelete()}
+        onPress={() => {
+          doDelete();
+          reset();
+        }}
         icon={{name: 'delete', color: 'white'}}
         buttonStyle={{minHeight: '100%', backgroundColor: 'red'}}
       />
@@ -61,9 +67,7 @@ const ListItem = ({singleMedia, navigation, myFilesOnly}) => {
   return (
     <RNEListItem.Swipeable
       bottomDivider
-      onPress={() => {
-        navigation.navigate('Single', singleMedia);
-      }}
+      onPress={() => navigation.navigate('Single', singleMedia)}
       {...swipeProps}
     >
       <Avatar

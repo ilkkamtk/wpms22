@@ -9,7 +9,7 @@ const useMedia = (update, myFilesOnly = false) => {
   const loadMedia = async () => {
     try {
       let json = await useTag().getFilesByTag(applicationTag);
-      console.log(json);
+      // console.log(json);
       if (myFilesOnly) {
         json = json.filter((file) => file.user_id === user.user_id);
       }

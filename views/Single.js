@@ -157,16 +157,26 @@ const Single = ({route}) => {
             style={{marginBottom: 12}}
           />
         ) : (
-          <Video
-            ref={handleVideoRef}
-            source={{uri: mediaUrl + filename}}
-            style={{width: '100%', height: '60%'}}
-            onError={(error) => {
-              console.log('Video error:', error);
+          // use Card.Image as a hack to fix card not stretching
+          <Card.Image
+            style={{
+              width: '100%',
+              height: undefined,
+              aspectRatio: 1,
             }}
-            shouldPlay
-            useNativeControls
-          />
+          >
+            <Video
+              ref={handleVideoRef}
+              source={{uri: mediaUrl + filename}}
+              style={{width: '100%', height: '100%'}}
+              onError={(error) => {
+                console.log('Video error:', error);
+              }}
+              shouldPlay
+              useNativeControls
+              isLooping
+            />
+          </Card.Image>
         )}
         <Card.Divider />
         <ListItem>

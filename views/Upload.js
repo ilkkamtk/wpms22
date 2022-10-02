@@ -11,10 +11,10 @@ import {applicationTag} from '../utils/variables';
 import FullSizeImage from '../components/FullSizeImage';
 import {Video} from 'expo-av';
 
+const defaultImage = 'https://via.placeholder.com/600x500?text=Select+media';
+
 const Upload = ({navigation}) => {
-  const [mediafile, setMediafile] = useState(
-    'https://via.placeholder.com/600x600?text=Select+media'
-  );
+  const [mediafile, setMediafile] = useState(defaultImage);
   const [mediatype, setMediatype] = useState('image');
   const [isLoading, setIsLoading] = useState(false);
   const {postMedia} = useMedia();
@@ -86,8 +86,8 @@ const Upload = ({navigation}) => {
   };
 
   const resetForm = () => {
-    setMediafile(null);
-    setMediatype(null);
+    setMediafile(defaultImage);
+    setMediatype('image');
     setValue('title', '');
     setValue('description', '');
   };
@@ -104,15 +104,27 @@ const Upload = ({navigation}) => {
           onPress={pickImage}
         />
       ) : (
-        <Video
-          source={{uri: mediafile}}
-          style={{width: '100%', height: '100%'}}
-          onError={(error) => {
-            console.log('Video error:', error);
-          }}
-          useNativeControls
-          resizeMode="cover"
-        />
+        // use Card.Image as a hack to fix card not stretching
+        <>
+          <Card.Image
+            style={{
+              width: '100%',
+              height: undefined,
+              aspectRatio: 1,
+            }}
+          >
+            <Video
+              source={{uri: mediafile}}
+              style={{width: '100%', height: '100%'}}
+              onError={(error) => {
+                console.log('Video error:', error);
+              }}
+              useNativeControls
+              resizeMode="cover"
+            />
+          </Card.Image>
+          <Card.Divider />
+        </>
       )}
       <Controller
         control={control}

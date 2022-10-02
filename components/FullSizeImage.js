@@ -6,14 +6,14 @@ import {Image} from 'react-native';
 const FullSizeImage = ({style, ...props}) => {
   const [ratio, setRatio] = useState(1);
   try {
-    Image.getSize(
-      props.source.uri,
-      (width, height) => height && setRatio(width / height)
-    );
+    props.source.uri &&
+      Image.getSize(
+        props.source.uri,
+        (width, height) => height && setRatio(width / height)
+      );
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
-  console.log('component rendered');
   return (
     <Card.Image
       {...props}
