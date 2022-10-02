@@ -11,6 +11,7 @@ const LoginForm = () => {
   const {
     control,
     handleSubmit,
+    setError,
     formState: {errors},
   } = useForm({
     defaultValues: {username: '', password: ''},
@@ -24,8 +25,11 @@ const LoginForm = () => {
       setUser(userData.user);
       setIsLoggedIn(true);
     } catch (error) {
-      console.error('Login - logIn', error);
-      // TODO: nofify user about wrong username/password/net error?
+      const type = error.message.includes('username') ? 'username' : 'password';
+      setError(type, {
+        type: 'server',
+        message: error.message,
+      });
     }
   };
 
@@ -51,12 +55,16 @@ const LoginForm = () => {
               )) ||
               (errors.username?.type === 'minLength' && (
                 <Text>Min 3 chars!</Text>
+              )) ||
+              (errors.username?.type === 'server' && (
+                <Text>{errors.username?.message}</Text>
               ))
             }
           />
         )}
         name="username"
       />
+      {errors.loginError && <Text>{errors.loginError.message}</Text>}
       <Controller
         control={control}
         rules={{
@@ -69,7 +77,14 @@ const LoginForm = () => {
             value={value}
             secureTextEntry={true}
             placeholder="Password"
-            errorMessage={errors.password && <Text>This is required.</Text>}
+            errorMessage={
+              (errors.password?.type === 'required' && (
+                <Text>This is required.</Text>
+              )) ||
+              (errors.password?.type === 'server' && (
+                <Text>{errors.password?.message}</Text>
+              ))
+            }
           />
         )}
         name="password"

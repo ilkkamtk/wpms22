@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
 import PropTypes from 'prop-types';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
@@ -6,7 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Button} from '@rneui/themed';
+import {Button, Card} from '@rneui/themed';
+import FadeInView from '../components/FadeInView';
 
 const Login = ({navigation}) => {
   // props is needed for navigation
@@ -36,15 +37,30 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <View>
-      {showRegForm ? <RegisterForm /> : <LoginForm />}
-      <Button
-        title={showRegForm ? 'or sign in' : 'Register a new account'}
-        onPress={() => {
-          setShowRegForm(!showRegForm);
+    <KeyboardAvoidingView
+      enabled
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      style={{flexGrow: 1}}
+    >
+      <ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: 'center',
         }}
-      ></Button>
-    </View>
+      >
+        <FadeInView>
+          {showRegForm ? <RegisterForm /> : <LoginForm />}
+          <Card>
+            <Button
+              title={showRegForm ? 'or sign in' : 'Register a new account'}
+              onPress={() => {
+                setShowRegForm(!showRegForm);
+              }}
+            ></Button>
+          </Card>
+        </FadeInView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
