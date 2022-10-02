@@ -1,6 +1,12 @@
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/variables';
-import {ListItem as RNEListItem, Avatar, ButtonGroup} from '@rneui/themed';
+import {
+  ListItem as RNEListItem,
+  Avatar,
+  Icon,
+  Button,
+  Text,
+} from '@rneui/themed';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {useMedia} from '../hooks/ApiHooks';
@@ -30,12 +36,35 @@ const ListItem = ({singleMedia, navigation, myFilesOnly}) => {
     ]);
   };
 
+  const swipeProps = {};
+
+  if (singleMedia.user_id === user.user_id) {
+    swipeProps.leftContent = () => (
+      <Button
+        title="Edit"
+        onPress={() => navigation.navigate('ModifyFile', singleMedia)}
+        icon={{name: 'edit', color: 'white'}}
+        buttonStyle={{minHeight: '100%'}}
+      />
+    );
+
+    swipeProps.rightContent = () => (
+      <Button
+        title="Delete"
+        onPress={() => doDelete()}
+        icon={{name: 'delete', color: 'white'}}
+        buttonStyle={{minHeight: '100%', backgroundColor: 'red'}}
+      />
+    );
+  }
+
   return (
-    <RNEListItem
+    <RNEListItem.Swipeable
       bottomDivider
       onPress={() => {
         navigation.navigate('Single', singleMedia);
       }}
+      {...swipeProps}
     >
       <Avatar
         size="large"
@@ -43,29 +72,24 @@ const ListItem = ({singleMedia, navigation, myFilesOnly}) => {
       />
       <RNEListItem.Content>
         <RNEListItem.Title numberOfLines={1} h4>
+          {singleMedia.media_type === 'image' ? (
+            <Icon name="crop-original" />
+          ) : (
+            <Icon name="ondemand-video" />
+          )}{' '}
           {singleMedia.title}
         </RNEListItem.Title>
         <RNEListItem.Subtitle numberOfLines={1}>
           {singleMedia.description}
         </RNEListItem.Subtitle>
-        {/* Display buttons only when user is the file owner */}
-        {/* {myFilesOnly && ( */}
         {singleMedia.user_id === user.user_id && (
-          <ButtonGroup
-            buttons={['Modify', 'Delete']}
-            onPress={async (index) => {
-              // console.log('button pressed:', index);
-              if (index === 0) {
-                navigation.navigate('ModifyFile', singleMedia);
-              } else {
-                doDelete();
-              }
-            }}
-          />
+          <RNEListItem.Subtitle numberOfLines={1}>
+            <Text style={{color: '#ccc'}}>Swipe to edit/delete</Text>
+          </RNEListItem.Subtitle>
         )}
       </RNEListItem.Content>
       <RNEListItem.Chevron />
-    </RNEListItem>
+    </RNEListItem.Swipeable>
   );
 };
 

@@ -4,14 +4,18 @@ import * as ImagePicker from 'expo-image-picker';
 import {useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
-import {Alert} from 'react-native';
+import {Alert, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import {applicationTag} from '../utils/variables';
+import FullSizeImage from '../components/FullSizeImage';
+import {Video} from 'expo-av';
 
 const Upload = ({navigation}) => {
-  const [mediafile, setMediafile] = useState(null);
-  const [mediatype, setMediatype] = useState(null);
+  const [mediafile, setMediafile] = useState(
+    'https://via.placeholder.com/600x600?text=Select+media'
+  );
+  const [mediatype, setMediatype] = useState('image');
   const [isLoading, setIsLoading] = useState(false);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
@@ -90,7 +94,26 @@ const Upload = ({navigation}) => {
 
   return (
     <Card>
-      <Card.Image source={{uri: mediafile || 'https://placekitten.com/300'}} />
+      {mediatype === 'image' ? (
+        <FullSizeImage
+          source={{
+            uri: mediafile,
+          }}
+          PlaceholderContent={<ActivityIndicator />}
+          style={{marginBottom: 12}}
+          onPress={pickImage}
+        />
+      ) : (
+        <Video
+          source={{uri: mediafile}}
+          style={{width: '100%', height: '100%'}}
+          onError={(error) => {
+            console.log('Video error:', error);
+          }}
+          useNativeControls
+          resizeMode="cover"
+        />
+      )}
       <Controller
         control={control}
         rules={{
@@ -126,15 +149,13 @@ const Upload = ({navigation}) => {
         )}
         name="description"
       />
-
-      <Button title="Select media" onPress={pickImage} />
-      <Button title="Reset" onPress={resetForm} />
       <Button
         title="Upload media"
         disabled={!mediafile}
         loading={isLoading}
         onPress={handleSubmit(onSubmit)}
       />
+      <Button title="Reset" color="secondary" onPress={resetForm} />
     </Card>
   );
 };
